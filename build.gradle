@@ -10,11 +10,6 @@ repositories {
 }
 
 dependencies {
-    // 핵심 컨테이너
-    implementation 'org.springframework:spring-context:7.0.2'
-
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
