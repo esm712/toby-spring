@@ -5,12 +5,15 @@
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- ConnectionMaker 구현체 -->
-    <bean id="connectionMaker" class="com.hokkom.dao.DConnectionMaker"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost/springbook"/>
+        <property name="username" value="spring"/>
+        <property name="password" value="book"/>
+    </bean>
 
-    <!-- UserDao -->
     <bean id="userDao" class="com.hokkom.dao.UserDao">
-        <property name="connectionMaker" ref="connectionMaker"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
 </beans>

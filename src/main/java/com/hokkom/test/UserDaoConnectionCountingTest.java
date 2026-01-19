@@ -1,7 +1,7 @@
 package com.hokkom.test;
 
-import com.hokkom.dao.CountingConnectionMaker;
 import com.hokkom.dao.CountingDaoFactory;
+import com.hokkom.dao.CountingDataSource;
 import com.hokkom.dao.UserDao;
 import com.hokkom.domain.User;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -21,8 +21,8 @@ public class UserDaoConnectionCountingTest {
         User user2 = userDao.get("lsm");
         User user3 = userDao.get("lsm");
 
-        CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
+        CountingDataSource cds = context.getBean("countingDataSource", CountingDataSource.class);
 
-        System.out.println("Connection counter : " + ccm.getCounter());
+        System.out.println("Connection counter : " + cds.getCounter());
     }
 }

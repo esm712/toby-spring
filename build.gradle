@@ -13,6 +13,9 @@ dependencies {
     // spring 핵심
     implementation 'org.springframework:spring-context:7.0.3'
 
+    // JDBC 지원 라이브러리 추가
+    implementation 'org.springframework:spring-jdbc:7.0.3'
+
     // mysql db 연결
     implementation 'com.mysql:mysql-connector-j:9.5.0'
 }
