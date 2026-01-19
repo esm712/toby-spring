@@ -2,6 +2,7 @@ package com.hokkom.test;
 
 import com.hokkom.dao.ConnectionMaker;
 import com.hokkom.dao.DConnectionMaker;
+import com.hokkom.dao.DaoFactory;
 import com.hokkom.dao.UserDao;
 import com.hokkom.domain.User;
 
@@ -10,9 +11,7 @@ import java.sql.SQLException;
 public class UserDaoTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        ConnectionMaker connectionMaker = new DConnectionMaker();
-
-        UserDao dao = new UserDao(connectionMaker);
+        UserDao dao = new DaoFactory().userDao();
 
         User user = new User();
         user.setId("lsm");
