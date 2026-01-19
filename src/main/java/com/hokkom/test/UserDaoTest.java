@@ -1,7 +1,5 @@
 package com.hokkom.test;
 
-import com.hokkom.dao.ConnectionMaker;
-import com.hokkom.dao.DConnectionMaker;
 import com.hokkom.dao.DaoFactory;
 import com.hokkom.dao.UserDao;
 import com.hokkom.domain.User;

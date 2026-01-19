@@ -10,6 +10,10 @@ repositories {
 }
 
 dependencies {
+    // spring 핵심
+    implementation 'org.springframework:spring-context:7.0.3'
+
+    // mysql db 연결
     implementation 'com.mysql:mysql-connector-j:9.5.0'
 }
 
