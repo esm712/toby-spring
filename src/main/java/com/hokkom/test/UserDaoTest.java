@@ -11,21 +11,8 @@ import java.sql.SQLException;
 public class UserDaoTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        // 방식 1. DaoFactory 직접 생성
-        DaoFactory factory = new DaoFactory();
-        UserDao dao1 = factory.userDao();
-        UserDao dao2 = factory.userDao();
-
-        System.out.println(dao1);
-        System.out.println(dao2);
-
-        // 방식 2. 스프링 애플리케이션 컨텍스트 방식 생성
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-        UserDao dao3 = context.getBean("userDao", UserDao.class);
         UserDao dao = context.getBean("userDao", UserDao.class);
-
-        System.out.println(dao3);
-        System.out.println(dao);
 
         User user = new User();
         user.setId("lsm");
