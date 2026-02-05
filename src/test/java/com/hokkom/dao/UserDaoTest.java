@@ -1,6 +1,7 @@
 package com.hokkom.dao;
 
 import com.hokkom.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -12,15 +13,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserDaoTest {
+    private UserDao dao;
+    private User user1;
+    private User user2;
+    private User user3;
 
-    @Test
-    public void addAndGet() throws SQLException {
+    @BeforeEach
+    public void setUp() {
         // ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         // XML 방식
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        this.dao = context.getBean("userDao", UserDao.class);
+        this.user1 = new User("user1", "유저1", "111111");
+        this.user2 = new User("user2", "유저2", "222222");
+        this.user3 = new User("user3", "유저3", "333333");
+    }
 
-        UserDao dao = context.getBean("userDao", UserDao.class);
 
+    @Test
+    public void addAndGet() throws SQLException {
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
@@ -37,12 +48,6 @@ class UserDaoTest {
 
     @Test
     public void count() throws SQLException {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
-        User user1 = new User("user1", "유저1", "111111");
-        User user2 = new User("user2", "유저2", "222222");
-        User user3 = new User("user3", "유저3", "333333");
-
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
@@ -58,8 +63,6 @@ class UserDaoTest {
 
     @Test
     public void getUserFailure() throws SQLException {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
