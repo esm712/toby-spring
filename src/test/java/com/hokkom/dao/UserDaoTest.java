@@ -3,27 +3,36 @@ package com.hokkom.dao;
 import com.hokkom.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestDaoFactory.class)
 class UserDaoTest {
+
+    @Autowired
+    private ApplicationContext context;
+
+    @Autowired
     private UserDao dao;
+
     private User user1;
     private User user2;
     private User user3;
 
     @BeforeEach
     public void setUp() {
-        // ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-        // XML 방식
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-        this.dao = context.getBean("userDao", UserDao.class);
+        System.out.println(this.context);
+        System.out.println(this);
         this.user1 = new User("user1", "유저1", "111111");
         this.user2 = new User("user2", "유저2", "222222");
         this.user3 = new User("user3", "유저3", "333333");
@@ -66,8 +75,6 @@ class UserDaoTest {
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
-        assertThrows(EmptyResultDataAccessException.class, () -> {
-            dao.get("unknown_id");
-        });
+        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("unknown_id"));
     }
 }

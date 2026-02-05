@@ -11,13 +11,16 @@ repositories {
 
 dependencies {
     // spring 핵심
-    implementation 'org.springframework:spring-context:7.0.3'
+    implementation 'org.springframework:spring-context:6.2.15'
 
     // JDBC 지원 라이브러리 추가
-    implementation 'org.springframework:spring-jdbc:7.0.3'
+    implementation 'org.springframework:spring-jdbc:6.2.15'
 
     // mysql db 연결
     implementation 'com.mysql:mysql-connector-j:9.5.0'
+
+    // spring test 모듈
+    testImplementation 'org.springframework:spring-test:6.2.15'
 
     // JUnit 5
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
@@ -25,8 +28,8 @@ dependencies {
     // AssertJ
     testImplementation 'org.assertj:assertj-core:3.27.7'
 
-    // 테스트 지원 라이브러리 추가
-    testImplementation 'org.springframework:spring-test:7.0.3'
+    // H2 Database for in-memory testing
+    testImplementation 'com.h2database:h2:2.2.224'
 }
 
 test {
