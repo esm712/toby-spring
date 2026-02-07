@@ -12,8 +12,4 @@
         <property name="password" value="book"/>
     </bean>
 
-    <bean id="userDao" class="com.hokkom.dao.UserDao">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
 </beans>
