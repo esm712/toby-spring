@@ -14,7 +14,7 @@ public class TestDaoFactory {
 
     @Bean
     public UserDao userDao() {
-        return new UserDao(dataSource());
+        return new UserDaoJdbc(dataSource());
     }
 
     @Bean
