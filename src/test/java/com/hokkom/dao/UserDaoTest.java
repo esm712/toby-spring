@@ -1,5 +1,6 @@
 package com.hokkom.dao;
 
+import com.hokkom.domain.Level;
 import com.hokkom.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,9 @@ class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        this.user1 = new User("user1", "유저1", "111111");
-        this.user2 = new User("user2", "유저2", "222222");
-        this.user3 = new User("user3", "유저3", "333333");
+        this.user1 = new User("user1", "유저1", "111111", Level.BASIC, 1, 0);
+        this.user2 = new User("user2", "유저2", "222222", Level.SILVER, 55, 10);
+        this.user3 = new User("user3", "유저3", "333333", Level.GOLD, 100, 40);
     }
 
 
@@ -46,15 +47,20 @@ class UserDaoTest {
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
-        User user = new User("lsm", "이승민", "123456");
-
-        dao.add(user);
+        dao.add(user1);
         assertThat(dao.getCount()).isEqualTo(1);
 
-        User user2 = dao.get(user.getId());
+        dao.add(user2);
+        assertThat(dao.getCount()).isEqualTo(2);
 
-        assertThat(user2.getName()).isEqualTo(user.getName());
-        assertThat(user2.getPassword()).isEqualTo(user.getPassword());
+        dao.add(user3);
+        assertThat(dao.getCount()).isEqualTo(3);
+
+        User userget1 = dao.get(user1.getId());
+        checkSameUser(userget1, user1);
+
+        User userget2 = dao.get(user2.getId());
+        checkSameUser(userget2, user2);
     }
 
     @Test
@@ -110,6 +116,9 @@ class UserDaoTest {
         assertThat(user1.getId()).isEqualTo(user2.getId());
         assertThat(user1.getName()).isEqualTo(user2.getName());
         assertThat(user1.getPassword()).isEqualTo(user2.getPassword());
+        assertThat(user1.getLevel()).isEqualTo(user2.getLevel());
+        assertThat(user1.getLogin()).isEqualTo(user2.getLogin());
+        assertThat(user1.getRecommend()).isEqualTo(user2.getRecommend());
     }
 
     @Test
