@@ -1,5 +1,6 @@
 package com.hokkom.dao;
 
+import com.hokkom.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -15,6 +16,11 @@ public class TestDaoFactory {
     @Bean
     public UserDao userDao() {
         return new UserDaoJdbc(dataSource());
+    }
+
+    @Bean
+    public UserService userService() {
+        return new UserService(userDao());
     }
 
     @Bean
