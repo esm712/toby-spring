@@ -1,5 +1,6 @@
 package com.hokkom.dao;
 
+import com.hokkom.service.DummyMailSender;
 import com.hokkom.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.mail.MailSender;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -22,12 +24,17 @@ public class TestDaoFactory {
 
     @Bean
     public UserService userService() {
-        return new UserService(userDao(), transactionManager());
+        return new UserService(userDao(), transactionManager(), mailSender());
     }
 
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Bean
+    public MailSender mailSender() {
+        return new DummyMailSender();
     }
 
     @Bean
