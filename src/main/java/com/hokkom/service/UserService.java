@@ -74,4 +74,7 @@ public class UserService {
         userDao.add(user);
     }
 
+    public void setMailSender(MockMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 }
