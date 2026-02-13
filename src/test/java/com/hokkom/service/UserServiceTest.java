@@ -53,11 +53,11 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         users = Arrays.asList(
-                new User("user1", "유저1", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
-                new User("user2", "유저2", "p2", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
-                new User("user3", "유저3", "p3", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1),
-                new User("user4", "유저4", "p4", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
-                new User("user5", "유저5", "p5", Level.GOLD, 100, Integer.MAX_VALUE)
+                new User("user1", "유저1", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0, "user1@test.com"),
+                new User("user2", "유저2", "p2", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "user2@test.com"),
+                new User("user3", "유저3", "p3", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1, "user3@test.com"),
+                new User("user4", "유저4", "p4", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD, "user4@test.com"),
+                new User("user5", "유저5", "p5", Level.GOLD, 100, Integer.MAX_VALUE, "user5@test.com")
         );
     }
 
@@ -67,7 +67,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void upgradeLevels() throws Exception {
+    public void upgradeLevels() {
         userDao.deleteAll();
         for(User user : users){
             userDao.add(user);
@@ -111,7 +111,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void upgradeAllOrNothing() throws Exception {
+    public void upgradeAllOrNothing() {
         UserService testUserService = new TestUserService(this.userDao, this.transactionManager, users.get(3).getId());
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
