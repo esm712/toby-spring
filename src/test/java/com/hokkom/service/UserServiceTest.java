@@ -22,6 +22,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestDaoFactory.class)
 class UserServiceTest {
+
+    static class TestUserService extends UserService {
+        private String id;
+
+        private TestUserService(UserDao userDao, String id) {
+            super(userDao);
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+
+    static class TestUserServiceException extends RuntimeException {}
     @Autowired
     UserService userService;
 
@@ -88,5 +104,20 @@ class UserServiceTest {
 
         assertThat(userWithLevelRead.getLevel()).isEqualTo(userWithLevel.getLevel());
         assertThat(userWithoutLevelRead.getLevel()).isEqualTo(Level.BASIC);
+    }
+
+    @Test
+    public void upgradeAllOrNothing() {
+        UserService testUserService = new TestUserService(this.userDao, users.get(3).getId());
+        userDao.deleteAll();
+        for(User user : users) userDao.add(user);
+
+        try{
+            testUserService.upgradeLevels();
+            fail("TestUserServiceException expected");
+        }
+        catch (TestUserServiceException e) {}
+
+        checkLevelUpgraded(users.get(1), false);
     }
 }
