@@ -17,8 +17,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.hokkom.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static com.hokkom.service.UserService.MIN_RECCOMEND_FOR_GOLD;
+import static com.hokkom.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
+import static com.hokkom.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,28 +27,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     @Autowired
+    UserService userService;
+
+    @Autowired
+    UserServiceImpl userServiceImpl;
+
+    @Autowired
     PlatformTransactionManager transactionManager;
 
     @Autowired
     MailSender mailSender;
-
-    static class TestUserService extends UserService {
-        private String id;
-
-        private TestUserService(UserDao userDao, PlatformTransactionManager transactionManager, MailSender mailSender, String id) {
-            super(userDao, transactionManager, mailSender);
-            this.id = id;
-        }
-
-        protected void upgradeLevel(User user) {
-            if (user.getId().equals(this.id)) throw new TestUserServiceException();
-            super.upgradeLevel(user);
-        }
-    }
-
-    static class TestUserServiceException extends RuntimeException {}
-    @Autowired
-    UserService userService;
 
     @Autowired
     UserDao userDao;
@@ -66,6 +54,22 @@ class UserServiceTest {
         );
     }
 
+    static class TestUserService extends UserServiceImpl {
+        private String id;
+
+        private TestUserService(UserDao userDao, MailSender mailSender, String id) {
+            super(userDao, mailSender);
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+
+    static class TestUserServiceException extends RuntimeException {}
+
     @Test
     public void bean() {
         assertNotNull(userService);
@@ -79,7 +83,7 @@ class UserServiceTest {
             userDao.add(user);
         }
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
         userService.upgradeLevels();
 
@@ -125,12 +129,15 @@ class UserServiceTest {
 
     @Test
     public void upgradeAllOrNothing() {
-        UserService testUserService = new TestUserService(this.userDao, this.transactionManager, this.mailSender, users.get(3).getId());
+        UserServiceImpl testUserService = new TestUserService(this.userDao, this.mailSender, users.get(3).getId());
+
+        UserServiceTx txUserService = new UserServiceTx(transactionManager, testUserService);
+
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
 
         try{
-            testUserService.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         }
         catch (TestUserServiceException e) {}

@@ -2,6 +2,8 @@ package com.hokkom.dao;
 
 import com.hokkom.service.DummyMailSender;
 import com.hokkom.service.UserService;
+import com.hokkom.service.UserServiceImpl;
+import com.hokkom.service.UserServiceTx;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -24,7 +26,12 @@ public class TestDaoFactory {
 
     @Bean
     public UserService userService() {
-        return new UserService(userDao(), transactionManager(), mailSender());
+        return new UserServiceTx(transactionManager(), userServiceImpl());
+    }
+
+    @Bean
+    public UserServiceImpl userServiceImpl() {
+        return new UserServiceImpl(userDao(), mailSender());
     }
 
     @Bean
