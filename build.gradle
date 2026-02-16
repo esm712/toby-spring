@@ -26,6 +26,9 @@ dependencies {
     // spring test 모듈
     testImplementation 'org.springframework:spring-test:6.2.15'
 
+    // Mockito 핵심 라이브러리 및 JUnit 5 extension 포함
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+
     // JUnit 5
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
