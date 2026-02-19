@@ -1,9 +1,7 @@
 package com.hokkom.dao;
 
-import com.hokkom.service.DummyMailSender;
-import com.hokkom.service.UserService;
-import com.hokkom.service.UserServiceImpl;
-import com.hokkom.service.UserServiceTx;
+import com.hokkom.service.*;
+import com.learningtest.MessageFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -22,11 +20,6 @@ public class TestDaoFactory {
     @Bean
     public UserDao userDao() {
         return new UserDaoJdbc(dataSource());
-    }
-
-    @Bean
-    public UserService userService() {
-        return new UserServiceTx(transactionManager(), userServiceImpl());
     }
 
     @Bean
@@ -59,5 +52,23 @@ public class TestDaoFactory {
         DatabasePopulatorUtils.execute(populator, dataSource);
 
         return dataSource;
+    }
+
+    @Bean
+    public MessageFactoryBean message() {
+        MessageFactoryBean factoryBean = new MessageFactoryBean();
+        factoryBean.setText("Factory Bean");
+
+        return factoryBean;
+    }
+
+    @Bean
+    public TxProxyFactoryBean userService() {
+        TxProxyFactoryBean factoryBean = new TxProxyFactoryBean();
+        factoryBean.setTarget(userServiceImpl());
+        factoryBean.setTransactionManager(transactionManager());
+        factoryBean.setPattern("upgradeLevels");
+        factoryBean.setServiceInterface(UserService.class);
+        return factoryBean;
     }
 }

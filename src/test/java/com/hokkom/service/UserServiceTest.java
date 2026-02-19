@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
@@ -43,6 +44,9 @@ class UserServiceTest {
     UserDao userDao;
 
     List<User> users;
+
+    @Autowired
+    ApplicationContext context;
 
     @BeforeEach
     void setUp() {
@@ -190,10 +194,13 @@ class UserServiceTest {
     }
 
     @Test
-    public void upgradeAllOrNothing() {
-        UserServiceImpl testUserService = new TestUserService(this.userDao, this.mailSender, users.get(3).getId());
+    @DirtiesContext
+    public void upgradeAllOrNothing() throws Exception {
+        TestUserService testUserService = new TestUserService(this.userDao, this.mailSender, users.get(3).getId());
 
-        UserServiceTx txUserService = new UserServiceTx(transactionManager, testUserService);
+        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        txProxyFactoryBean.setTarget(testUserService);
+        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
